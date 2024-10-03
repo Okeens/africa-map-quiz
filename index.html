@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Africa Map Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #map {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .progress {
+            margin: 20px auto;
+            width: 80%;
+            background-color: #ddd;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #4caf50;
+            border-radius: 10px;
+            width: 0;
+        }
+
+        .score {
+            margin: 20px auto;
+            font-size: 1.2em;
+        }
+
+        .question {
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+        }
+
+        .option {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .option:hover {
+            background-color: #555;
+        }
+
+        #end-screen {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Africa Map Quiz</h1>
+    
+    <div id="quiz-container">
+        <img id="map" src="https://upload.wikimedia.org/wikipedia/commons/8/86/Africa_blank_map.png" alt="Map of Africa">
+        
+        <div class="progress">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="question" id="question">Which country is Algeria?</div>
+        <div class="options">
+            <div class="option" onclick="checkAnswer('Algeria')">Algeria</div>
+            <div class="option" onclick="checkAnswer('Morocco')">Morocco</div>
+            <div class="option" onclick="checkAnswer('Nigeria')">Nigeria</div>
+            <div class="option" onclick="checkAnswer('Egypt')">Egypt</div>
+        </div>
+
+        <div class="score" id="score">Score: 0</div>
+    </div>
+
+    <div id="end-screen">
+        <h2>Quiz Complete!</h2>
+        <p>Your final score is: <span id="final-score"></span></p>
+        <button onclick="restartQuiz()">Restart Quiz</button>
+    </div>
+
+    <script>
+        const questions = [
+            { country: 'Algeria', options: ['Algeria', 'Morocco', 'Nigeria', 'Egypt'] },
+            { country: 'Angola', options: ['Angola', 'Democratic Republic of Congo', 'Kenya', 'South Africa'] },
+            { country: 'Ghana', options: ['Ghana', 'Senegal', 'Ethiopia', 'Madagascar'] },
+            { country: 'Eswatini', options: ['Eswatini', 'Mozambique', 'Malawi', 'Namibia'] },
+            // Add more questions for all the countries in your list
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            document.getElementById('question').innerText = `Which country is ${questions[currentQuestion].country}?`;
+            const options = document.getElementsByClassName('option');
+            for (let i = 0; i < options.length; i++) {
+                options[i].innerText = questions[currentQuestion].options[i];
+            }
+            updateProgressBar();
+        }
+
+        function checkAnswer(answer) {
+            const correctAnswer = questions[currentQuestion].country;
+            if (answer === correctAnswer) {
+                score++;
+                document.getElementById('score').innerText = `Score: ${score}`;
+            }
+
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = (currentQuestion / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function endQuiz() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('end-screen').style.display = 'block';
+            document.getElementById('final-score').innerText = score;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('end-screen').style.display = 'none';
+            document.getElementById('score').innerText = `Score: ${score}`;
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
